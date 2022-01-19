@@ -39,7 +39,7 @@ function init(type) {
             source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
 
-            analyser.connect(delay);
+         //   analyser.connect(delay);
          //   delay.connect(audioCtx.destination)
 
             visualize();
