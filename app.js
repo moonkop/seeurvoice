@@ -1,8 +1,7 @@
-
-document.querySelector("#btn_useSys").addEventListener('click',()=>{
+document.querySelector("#btn_useSys").addEventListener('click', () => {
     init('sys')
 })
-document.querySelector("#btn_useMic").addEventListener('click',()=>{
+document.querySelector("#btn_useMic").addEventListener('click', () => {
     init('mic')
 })
 // set up canvas context for visualizer
@@ -14,7 +13,7 @@ var intendedWidth = document.querySelector('.wrapper').clientWidth;
 canvas.setAttribute('width', intendedWidth);
 
 console.log('draw')
-let style =  'rgb(255,0,0)';
+let style = 'rgb(255,0,0)';
 //    console.log(style);
 
 canvasCtx.fillStyle = style;
@@ -22,13 +21,15 @@ canvasCtx.fillRect(500, 500, 100, 100);
 
 var WIDTH = canvas.width;
 HEIGHT = canvas.height;
-window.addEventListener('resize',()=>{
+window.addEventListener('resize', () => {
     console.log('resize');
     let clientWidth = document.querySelector('.wrapper').clientWidth;
     if (WIDTH != clientWidth) {
+        WIDTH = clientWidth
         canvas.setAttribute('width', WIDTH);
     }
 })
+
 function init(type) {
 
     var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -53,17 +54,14 @@ function init(type) {
     var convolver = audioCtx.createConvolver();
 
 
-
-
-
     var drawVisual;
     //main block for doing the audio recording
 
-    if (type=='mic') {
+    if (type == 'mic') {
         var constraints = {
             audio: true
         }
-        navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+        navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
             source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
             //     source.connect(audioCtx.destination);
@@ -71,7 +69,7 @@ function init(type) {
             visualize();
             voiceChange();
 
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.log('The following gUM error occured: ' + err);
         })
 
@@ -86,7 +84,7 @@ function init(type) {
             console.log(stream);
             console.log(stream.getTracks());
             console.log(stream.getTracks().filter(item => item.kind == 'audio'));
-            var source1=stream.getTracks().filter(item => item.kind == 'audio')[0];
+            var source1 = stream.getTracks().filter(item => item.kind == 'audio')[0];
             console.log(source);
             source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
@@ -106,7 +104,7 @@ function init(type) {
         let arrays = [];
         let times = 0;
         console.log(canvasCtx)
-        var drawAlt = function() {
+        var drawAlt = function () {
             if (times > WIDTH) {
                 times = 0;
             }
@@ -117,20 +115,20 @@ function init(type) {
             let max = 0;
             for (let i = 0; i < dataArrayAlt.length; i++) {
                 if (dataArrayAlt[max] < dataArrayAlt[i]) {
-                    max=i
+                    max = i
                 }
             }
-          //  dataArrayAlt[max]=255
+            //  dataArrayAlt[max]=255
             mute.textContent = max;
             for (var i = 0; i < 1024; i++) {
                 barHeight = dataArrayAlt[i];
-                let style =  'hsl('+ (256-barHeight*2) +',100%,50%)';
-            //    console.log(style);
+                let style = 'hsl(' + (256 - barHeight * 2) + ',100%,50%)';
+                //    console.log(style);
                 canvasCtx.fillStyle = style;
                 canvasCtx.fillRect(times, i, 1, 1);
 
             }
-            let style =  'rgb(255,255,255)';
+            let style = 'rgb(255,255,255)';
             //    console.log(style);
             canvasCtx.fillStyle = style;
             canvasCtx.fillRect(times, max, 2, 2);
@@ -142,9 +140,6 @@ function init(type) {
         setInterval(drawAlt, 0);
 
     }
-
-
-
 
 
 }
