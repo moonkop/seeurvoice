@@ -25,6 +25,8 @@ function init(type) {
     let source;
     let freq = document.querySelector('#freq');
     let analyser = audioCtx.createAnalyser();
+    let delay=audioCtx.createDelay(100)
+     delay.delayTime.value = 3.0; 
     analyser.minDecibels = -90;
     analyser.maxDecibels = -10;
     analyser.smoothingTimeConstant = 0.1;
@@ -36,6 +38,10 @@ function init(type) {
         ).then(function (stream) {
             source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyser);
+
+            analyser.connect(delay);
+         //   delay.connect(audioCtx.destination)
+
             visualize();
 
         }).catch(function (err) {
@@ -60,7 +66,7 @@ function init(type) {
     }
 
     function visualize() {
-        analyser.fftSize = 16384;
+        analyser.fftSize = 32768;
         let bufferLengthAlt = analyser.frequencyBinCount;
         console.log(bufferLengthAlt);
         let dataArrayAlt = new Uint8Array(bufferLengthAlt);
@@ -79,7 +85,7 @@ function init(type) {
                     max = i
                 }
             }
-            freq.textContent = max;
+            freq.textContent = (max/139*200).toFixed(0);
             for (let i = 0; i < 1024; i++) {
                 barHeight = dataArrayAlt[i];
                 let style = 'hsl(' + (256 - barHeight * 2) + ',100%,50%)';

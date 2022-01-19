@@ -12,6 +12,7 @@ body {
 	height: inherit;
 	background-color: #999;
 	background-image: url(../images/pattern.png);
+  margin:0;
 }
 
 h1, h2, label {
