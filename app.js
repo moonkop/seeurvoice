@@ -24,10 +24,10 @@ var WIDTH = canvas.width;
 HEIGHT = canvas.height;
 window.addEventListener('resize',()=>{
     console.log('resize');
-    WIDTH = document.querySelector('.wrapper').clientWidth;
-
-    canvas.setAttribute('width', WIDTH);
-
+    let clientWidth = document.querySelector('.wrapper').clientWidth;
+    if (WIDTH != clientWidth) {
+        canvas.setAttribute('width', WIDTH);
+    }
 })
 function init(type) {
 
